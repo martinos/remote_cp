@@ -1,0 +1,3 @@
+module RemoteCp
+  # Your code goes here...
+end
