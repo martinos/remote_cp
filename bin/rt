@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'rubygems'
 require 'zlib'
 require 'archive/tar/minitar'
@@ -16,7 +17,7 @@ class RemoteCp < Thor
     super
   end
   
-  desc "cp", "copy to the cloud clipboard"
+  desc "cp [FILENAME]", "copy FILENAME to the cloudi. If FILENAME not given send STDIN to the cloud"
   def cp(filename = nil)
     type = nil
     content_type = nil 
@@ -48,9 +49,7 @@ class RemoteCp < Thor
   end
   
   desc "p", "paste from the cloud to current dir"
-  def rmp
-    s3_connect
-
+  def p
     file_name = S3Object.find("file_name.txt", 'RemoteClipboard').value
     type = S3Object.find("type", 'RemoteClipboard').value
 
