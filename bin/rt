@@ -17,7 +17,7 @@ class RemoteCp < Thor
     super
   end
   
-  desc "cp [FILENAME]", "copy FILENAME to the cloudi. If FILENAME not given send STDIN to the cloud"
+  desc "cp [FILENAME]", "copy FILENAME to the cloud. If FILENAME not given send STDIN to the cloud"
   def cp(filename = nil)
     type = nil
     content_type = nil 
