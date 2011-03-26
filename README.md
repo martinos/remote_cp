@@ -6,7 +6,7 @@ Install the gem
 
     $ gem install remote_cp
 
-Add the Amazon access and private key of your S3 bucket in your .bash_rc file:
+Add the Amazon access and private key of your S3 bucket in your .bashrc file:
 
     export AMAZON_ACCESS_KEY_ID='MYACCESSKEY'
     export AMAZON_SECRET_ACCESS_KEY='SECRET ACCESS KEY'
