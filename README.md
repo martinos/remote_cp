@@ -13,24 +13,25 @@ Add the Amazon access and private key of your S3 bucket in your .bashrc file:
     export AMAZON_SECRET_ACCESS_KEY='SECRET ACCESS KEY'
 ##Usage
 To copy a file to the remote clipboard:
-    <machineA>$ rt cp filename
+
+    machineA: rt cp filename
 The file can be pasted on another machine if remote_cp gem has been installed with the same bucket credentials.
 
-    <machineB>$ rt p
+    machineB: rt p
 You can also copy directories
 
-    <machineA>$ rt cp dirname
+    machineA: rt cp dirname
 To paste the file in the current directory
 
-    <machineB:/home/tata>$ rt p
-    <machineB:/home/tata>$ ls -d */
+    machineB: /home/tata>$ rt p
+    machineB: /home/tata>$ ls -d */
     /dirname
 You can copy stdin to the remote clipboard:
 
-    <machineA> ls -l | rt cp
+    machineA: ls -l | rt cp
 You can also dump the remote clipboard to the stdout.
 
-    <machineB> rt cat
+    machineB: rt cat
     total 8
     drwxr-xr-x   5 martinos  staff   170 25 Mar 23:08 .
     drwxr-xr-x  10 martinos  staff   340 25 Mar 23:08 log
