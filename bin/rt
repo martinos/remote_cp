@@ -73,12 +73,12 @@ class RemoteCp < Thor
   
   desc "fn", "Returns the file name of the copied file"
   def fn
-    rm_filename
+    puts rm_filename
   end
 
   desc "cat", "Dump the copied file to stdout"
   def cat
-    rm_content
+    puts rm_content
   end
 
 private
