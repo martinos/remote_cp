@@ -1,7 +1,7 @@
 # RemoteCp [![](http://stillmaintained.com/martinos/remote_cp.png)](http://stillmaintained.com/martinos/remote_cp)
 </a>
 ## Description
-RemoteCp is a command line tool intended facilitate copying files accross the internet. You need to install the gem on both source and destination systems. Since it uses Amason S3, you need to create a S3 Bucket and configure the source and destination computer with the bucket keys.
+RemoteCp is a command line tool intended to facilitate copying files accross the internet. You need to install the gem on both source and destination computers. Since it uses Amason S3, you need to create a S3 Bucket and configure the source and destination computer with the bucket keys.
 ##Installation
 Install the gem
 
@@ -11,6 +11,7 @@ Add the Amazon access and private key of your S3 bucket in your .bashrc file:
 
     export AMAZON_ACCESS_KEY_ID='MYACCESSKEY'
     export AMAZON_SECRET_ACCESS_KEY='SECRET ACCESS KEY'
+    export REMOTE_CB_BUCKET='bucket_name'
 ##Usage
 To copy a file to the remote clipboard:
 

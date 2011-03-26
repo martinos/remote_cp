@@ -43,15 +43,15 @@ class RemoteCp < Thor
     end
 
     # I think that all this info should be included file's metadata
-    S3Object.store("file_name.txt", basename, 'RemoteClipboard')
-    S3Object.store("content", content, 'RemoteClipboard', :content_type => content_type)
-    S3Object.store("type", type, 'RemoteClipboard')
+    S3Object.store("file_name.txt", basename, bucket_name)
+    S3Object.store("content", content, bucket_name, :content_type => content_type)
+    S3Object.store("type", type, bucket_name)
   end
   
   desc "p", "paste from the cloud to current dir"
   def p
-    file_name = S3Object.find("file_name.txt", 'RemoteClipboard').value
-    type = S3Object.find("type", 'RemoteClipboard').value
+    file_name = S3Object.find("file_name.txt", bucket_name).value
+    type = S3Object.find("type", bucket_name).value
 
     if File.exist?(file_name)
       puts "#{file_name} already exist."
@@ -60,7 +60,7 @@ class RemoteCp < Thor
       return unless res == "y"
     end
      
-    content = S3Object.find('content', 'RemoteClipboard').value
+    content = S3Object.find('content', bucket_name).value
     case type
     when 'file'
       File.open(file_name, "w+") {|f| f << content}
@@ -90,13 +90,17 @@ private
         :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY']
     )
   end
+  
+  def bucket_name
+    ENV["REMOTE_CB_BUCKET"]
+  end
 
   def filename
-    S3Object.find("file_name.txt", 'RemoteClipboard').value
+    S3Object.find("file_name.txt", bucket_name).value
   end
 
   def rm_content
-    S3Object.find( 'content', 'RemoteClipboard').value
+    S3Object.find('content', bucket_name).value
   end
 end
 
