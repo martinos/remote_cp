@@ -32,11 +32,11 @@ You can also dump the remote clipboard to the stdout.
 
     <machineB> rt cat
     total 8
-    drwxr-xr-x   5 martinchabot  staff   170 25 Mar 23:08 .
-    drwxr-xr-x  10 martinchabot  staff   340 25 Mar 23:08 clog
-    drwxr-xr-x   2 martinchabot  staff    68 25 Mar 23:08 a_dir
-    -rw-r--r--   1 martinchabot  staff    15 25 Mar 23:07 a_file.txt
-    drwxr-xr-x  65 martinchabot  staff  2210 25 Mar 23:07 ..
+    drwxr-xr-x   5 martinos  staff   170 25 Mar 23:08 .
+    drwxr-xr-x  10 martinos  staff   340 25 Mar 23:08 log
+    drwxr-xr-x   2 martinos  staff    68 25 Mar 23:08 a_dir
+    -rw-r--r--   1 martinos  staff    15 25 Mar 23:07 a_file.txt
+    drwxr-xr-x  65 martinos  staff  2210 25 Mar 23:07 ..
 
 
 
