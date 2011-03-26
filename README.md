@@ -11,7 +11,7 @@ Add the Amazon access and private key of your S3 bucket in your .bashrc file:
 
     export AMAZON_ACCESS_KEY_ID='MYACCESSKEY'
     export AMAZON_SECRET_ACCESS_KEY='SECRET ACCESS KEY'
-    export REMOTE_CB_BUCKET='bucket_name'
+    export REMOTE_CP_BUCKET='bucket_name'
 ##Usage
 To copy a file to the remote clipboard:
 

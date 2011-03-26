@@ -92,7 +92,7 @@ private
   end
   
   def bucket_name
-    ENV["REMOTE_CB_BUCKET"]
+    ENV["REMOTE_CP_BUCKET"]
   end
 
   def filename
