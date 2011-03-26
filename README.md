@@ -1,5 +1,4 @@
-# RemoteCp
-<a href="http://stillmaintained.com/martinos/remote_cp">
+# RemoteCp<a href="http://stillmaintained.com/martinos/remote_cp">
 <img src="http://stillmaintained.com/martinos/remote_cp.png" />
 </a>
 ## Description
