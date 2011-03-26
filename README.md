@@ -37,6 +37,9 @@ You can also dump the remote clipboard to the stdout.
     drwxr-xr-x   2 martinos  staff    68 25 Mar 23:08 a_dir
     -rw-r--r--   1 martinos  staff    15 25 Mar 23:07 a_file.txt
     drwxr-xr-x  65 martinos  staff  2210 25 Mar 23:07 ..
+## License
+
+Released under the MIT License.  See the LICENSE file for further details.
 
 
 
