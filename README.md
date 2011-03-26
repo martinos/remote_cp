@@ -1,4 +1,7 @@
-# RemoteCp 
+# RemoteCp
+<a href="http://stillmaintained.com/martinos/remote_cp">
+<img src="http://stillmaintained.com/martinos/remote_cp.png" />
+</a>
 ## Description
 RemoteCp is a command line tool intended facilitate copying files accross the internet. You need to install the gem on both source and destination systems. Since it uses Amason S3, you need to create a S3 Bucket and configure the source and destination computer with the bucket keys.
 ##Installation
