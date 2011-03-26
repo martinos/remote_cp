@@ -16,10 +16,10 @@ To copy a file to the remote clipboard:
     <machineA>$ rt cp filename
 The file can be pasted on another machine if remote_cp gem has been installed with the same bucket credentials.
 
-    <machineB>$ rt cp
+    <machineB>$ rt p
 You can also copy directories
 
-    <machine A>$ rt cp dirname
+    <machineA>$ rt cp dirname
 To paste the file in the current directory
 
     <machineB:/home/tata>$ rt p
