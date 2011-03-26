@@ -1,6 +1,6 @@
 # RemoteCp 
 ## Description
-RemoteCp is a command line tool intended facilitate copying files accross the internet. In order to use this library you need to create an Amazon S3 Bucket.
+RemoteCp is a command line tool intended facilitate copying files accross the internet. You need to install the gem on both source and destination systems. Since it use Amason S3 you need to create an S3 Bucket and configure the source and destination computer with the bucket keys.s=
 ##Installation
 Install the gem
 
