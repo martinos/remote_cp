@@ -107,7 +107,7 @@ private
         f << YAML::dump(config)
       end
       File.chmod(0600, config_filename)
-      raise "Please setup your .remote_cp.yml config file in you home dir."
+      raise "Please setup your .remote_cp.yml config file in your home dir."
     end
   end
 end
