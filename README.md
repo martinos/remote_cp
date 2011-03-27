@@ -7,11 +7,11 @@ Install the gem
 
     $ gem install remote_cp
 
-Add the Amazon access and private key of your S3 bucket in your .bashrc file:
+Setup your remote cp by editing ~/.remote_cp.yml config file:
 
-    export AMAZON_ACCESS_KEY_ID='MYACCESSKEY'
-    export AMAZON_SECRET_ACCESS_KEY='SECRET ACCESS KEY'
-    export REMOTE_CP_BUCKET='bucket_name'
+    :access_key_id: MY_ACCESS_KEY
+    :secret_access_key: MY_SECRET
+    :bucket_name: MY_BUCKET_NAME
 ##Usage
 To copy a file to the remote clipboard:
 
