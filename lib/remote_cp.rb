@@ -4,101 +4,86 @@ require 'archive/tar/minitar'
 require 'thor'
 require 'aws/s3'
 
-class RemoteCp < Thor
-  include Archive::Tar
-      include AWS::S3
-  
-  def initialize(*args)
-    AWS::S3::Base.establish_connection!(
-        :access_key_id     => ENV['AMAZON_ACCESS_KEY_ID'],
-        :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY']
-    )
-    super
-  end
-  
-  desc "cp", "copy to the cloud clipboard"
-  def cp(filename = nil)
-    type = nil
-    content_type = nil 
+include AWS::S3
 
-    content = if filename.nil?
-      basename = "anonymous"
-      $stdin.read
-    else
-      full_path = File.expand_path(filename)
-      basename = File.basename(full_path)
-      if File.directory?(full_path)
-        content_type = "application/gzip"
-        io = StringIO.new("")
-        tgz = Zlib::GzipWriter.new(io)
-        Minitar.pack(basename, tgz)
-        type = 'directory' 
-        io.rewind
-        io.string
+module RemoteCp  
+  class Clipboard
+    include AWS::S3
+    attr_accessor :content_bucket, :filename_bucket, :type_bucket
+    
+    def initialize
+      connect
+      @bucket = Bucket.find(bucket_name)
+      @content_bucket = @bucket['content'] || create_obj("content", "")
+      @filename_bucket = @bucket['file_name.txt'] || create_obj("file_name.txt", "")
+      @type_bucket = @bucket['type'] || create_obj("type", "")
+    end
+
+    def connect
+      AWS::S3::Base.establish_connection!(
+      :access_key_id     => config[:access_key_id],
+      :secret_access_key => config[:secret_access_key]
+      )
+    end
+
+    def config
+      config_filename = File.join(ENV["HOME"], ".remote_cp.yml")
+
+      @config ||= if File.exist?(config_filename)
+        conf = Hash.new {|key, val| raise "Missing key #{key} in config file: #{config_filename}"} 
+        conf.replace(YAML::load_file(config_filename))
       else
-        type = 'file'
-        File.open(full_path)
+        config = {:access_key_id => "MY_ACCESS_KEY", :secret_access_key => "MY_SECRET", :bucket_name => "MY_BUCKET_NAME"}
+        File.open(config_filename, "w") do |f| 
+          f << YAML::dump(config)
+        end
+        File.chmod(0600, config_filename)
+        raise "Please setup your .remote_cp.yml config file in your home dir."
       end
     end
-
-    # I think that all this info should be included file's metadata
-    S3Object.store("file_name.txt", basename, 'RemoteClipboard')
-    S3Object.store("content", content, 'RemoteClipboard', :content_type => content_type)
-    S3Object.store("type", type, 'RemoteClipboard')
-  end
-  
-  desc "p", "paste from the cloud to current dir"
-  def rmp
-    s3_connect
-
-    file_name = S3Object.find("file_name.txt", 'RemoteClipboard').value
-    type = S3Object.find("type", 'RemoteClipboard').value
-
-    if File.exist?(file_name)
-      puts "#{file_name} already exist."
-      print "Do you want to replace it (y/n)? "
-      res = $stdin.gets.chomp
-      return unless res == "y"
+    
+    # str : content to copy
+    # type : :file, :directory
+    def push(str, filename = "anomymous", type = :file, content_type = nil)
+      # I think that all this info should be included file's metadata 
+      # AWS::S3 does not support metadata setting on creation.
+      @filename_bucket.value = filename
+      @filename_bucket.save
+      
+      @content_bucket.value = str
+      @content_bucket.content_type = content_type
+      @content_bucket.save
+      
+      @type_bucket.value = type.to_s
+      @type_bucket.save
     end
-     
-    content = S3Object.find('content', 'RemoteClipboard').value
-    case type
-    when 'file'
-      File.open(file_name, "w+") {|f| f << content}
-      puts "#{file_name} copied."
-    when 'directory'
-      tgz = Zlib::GzipReader.new(StringIO.new(content))
-      Minitar.unpack(tgz, ".")
+    
+    def pull
+      @content_bucket.value
     end
-  end
-  
-  desc "fn", "Returns the file name of the copied file"
-  def fn
-    rm_filename
-  end
+    
+    def bucket_name
+      config[:bucket_name] 
+    end
+    
+    def filetype
+      @type_bucket.value
+    end
+    
+    def content
+      @bucket['content'].value
+    end
 
-  desc "cat", "Dump the copied file to stdout"
-  def cat
-    rm_content
-  end
-
-private
-  def s3_connect
-    require 'aws/s3'
-    include AWS::S3
-    AWS::S3::Base.establish_connection!(
-        :access_key_id     => ENV['AMAZON_ACCESS_KEY_ID'],
-        :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY']
-    )
-  end
-
-  def filename
-    S3Object.find("file_name.txt", 'RemoteClipboard').value
-  end
-
-  def rm_content
-    S3Object.find( 'content', 'RemoteClipboard').value
+    def filename
+      @filename_bucket.value
+    end
+    
+    def create_obj(key, value)
+      obj = @bucket.new_object
+      obj.key = key
+      obj.value = value
+      obj.store
+      obj
+    end
   end
 end
-
-RemoteCp.start

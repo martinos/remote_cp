@@ -5,22 +5,21 @@ require 'archive/tar/minitar'
 require 'thor'
 require 'aws/s3'
 require 'yaml'
+require 'remote_cp'
 
-class RemoteCp < Thor
+class Clipboard < Thor
   include Archive::Tar
-      include AWS::S3
+  include AWS::S3
+  include RemoteCp
   
   def initialize(*args)
-    AWS::S3::Base.establish_connection!(
-        :access_key_id     => config[:access_key_id],
-        :secret_access_key => config[:secret_access_key]
-    )
+    @clipboard = Clipboard.new
     super
   end
   
   desc "cp [FILENAME]", "copy FILENAME to the cloud. If FILENAME not given send STDIN to the cloud"
   def cp(filename = nil)
-    type = nil
+    type = 'file'
     content_type = nil 
 
     content = if filename.nil?
@@ -42,27 +41,22 @@ class RemoteCp < Thor
         File.open(full_path)
       end
     end
-
-    # I think that all this info should be included file's metadata
-    S3Object.store("file_name.txt", basename, bucket_name)
-    S3Object.store("content", content, bucket_name, :content_type => content_type)
-    S3Object.store("type", type, bucket_name)
+    @clipboard.push(content, basename, type, content_type)
   end
   
   desc "p", "paste from the cloud to current dir"
   def p
-    file_name = S3Object.find("file_name.txt", bucket_name).value
-    type = S3Object.find("type", bucket_name).value
-
+    file_name = @clipboard.filename
     if File.exist?(file_name)
       puts "#{file_name} already exist."
       print "Do you want to replace it (y/n)? "
       res = $stdin.gets.chomp
       return unless res == "y"
     end
-     
-    content = S3Object.find('content', bucket_name).value
-    case type
+    
+    content = @clipboard.content
+
+    case @clipboard.filetype
     when 'file'
       File.open(file_name, "w+") {|f| f << content}
       puts "#{file_name} copied."
@@ -74,42 +68,18 @@ class RemoteCp < Thor
   
   desc "fn", "Returns the file name of the copied file"
   def fn
-    puts rm_filename
+    puts @clipboard.filename
+  end
+
+  desc "ft", "Returns the file type"
+  def ft
+    puts @clipboard.filetype
   end
 
   desc "cat", "Dump the copied file to stdout"
   def cat
-    puts rm_content
-  end
-
-private
-  def bucket_name
-    config[:bucket_name] 
-  end
-
-  def filename
-    S3Object.find("file_name.txt", bucket_name).value
-  end
-
-  def rm_content
-    S3Object.find('content', bucket_name).value
-  end
-
-  def config
-    config_filename = File.join(ENV["HOME"], ".remote_cp.yml")
-
-    @config ||= if File.exist?(config_filename)
-      conf = Hash.new {|key, val| raise "Missing key #{key} in config file: #{config_filename}"} 
-      conf.replace(YAML::load_file(config_filename))
-    else
-      config = {:access_key_id => "MY_ACCESS_KEY", :secret_access_key => "MY_SECRET", :bucket_name => "MY_BUCKET_NAME"}
-      File.open(config_filename, "w") do |f| 
-        f << YAML::dump(config)
-      end
-      File.chmod(0600, config_filename)
-      raise "Please setup your .remote_cp.yml config file in your home dir."
-    end
+    puts @clipboard.content
   end
 end
 
-RemoteCp.start
+Clipboard.start
