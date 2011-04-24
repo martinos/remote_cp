@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remote_cp (0.0.8)
+    remote_cp (0.0.9)
       aws-s3
       minitar
       thor

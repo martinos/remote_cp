@@ -3,6 +3,7 @@ require 'zlib'
 require 'archive/tar/minitar'
 require 'thor'
 require 'aws/s3'
+require 'remote_cp/core_ext'
 
 include AWS::S3
 

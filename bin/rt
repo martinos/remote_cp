@@ -10,10 +10,9 @@ require 'remote_cp'
 class Clipboard < Thor
   include Archive::Tar
   include AWS::S3
-  include RemoteCp
   
   def initialize(*args)
-    @clipboard = Clipboard.new
+    @clipboard = RemoteCp::Clipboard.new
     super
   end
   
