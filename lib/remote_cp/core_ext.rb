@@ -3,7 +3,7 @@ def rt_cat
   @clipboard.pull
 end
   
-def rt_cp
+def rt_cp(str)
   @clipboard ||= RemoteCp::Clipboard.new
-  @clipboard.push(self)
+  @clipboard.push(str)
 end
