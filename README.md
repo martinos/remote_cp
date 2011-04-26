@@ -22,7 +22,7 @@ The file can be pasted on another machine if remote_cp gem has been installed wi
 You can also copy directories
 
     machineA: rt cp dirname
-To paste the file in the current directory
+To paste the copied directory in the current directory
 
     machineB: /home/tata>$ rt p
     machineB: /home/tata>$ ls -d */
