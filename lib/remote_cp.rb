@@ -28,7 +28,7 @@ module RemoteCp
     end
 
     def config
-      config_filename = File.join(ENV["HOME"], ".remote_cp.yml")
+      config_filename = File.join(ENV["HOME"], ".remote_cp")
 
       @config ||= if File.exist?(config_filename)
         conf = Hash.new {|key, val| raise "Missing key #{key} in config file: #{config_filename}"} 
