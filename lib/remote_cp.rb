@@ -29,6 +29,12 @@ module RemoteCp
 
     def config
       config_filename = File.join(ENV["HOME"], ".remote_cp")
+      old_filename = File.join(ENV["HOME"], ".remote_cp.yml")
+ 
+      if File.exist?(old_filename)
+        puts ".remote_cp.yml configuration file name is depricated. Renaming to .remote_cp"
+        File.rename(old_filename, config_filename)
+      end
 
       @config ||= if File.exist?(config_filename)
         conf = Hash.new {|key, val| raise "Missing key #{key} in config file: #{config_filename}"} 
