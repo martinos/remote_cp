@@ -1,18 +1,18 @@
-# RemoteCp [![](http://stillmaintained.com/martinos/remote_cp.png)](http://stillmaintained.com/martinos/remote_cp)
+= RemoteCp [![](http://stillmaintained.com/martinos/remote_cp.png)](http://stillmaintained.com/martinos/remote_cp)
 </a>
-## Description
+== Description
 RemoteCp is a command line tool intended to facilitate copying files accross the internet. You need to install the gem on both source and destination computers. Since it uses Amason S3, you need to create a S3 Bucket and configure the source and destination computer with the bucket keys.
 ##Installation
 Install the gem
 
     $ gem install remote_cp
 
-Setup your remote cp by editing ~/.remote_cp.yml config file:
+Setup your remote cp by editing ~/.remote_cp config file:
 
     :access_key_id: MY_ACCESS_KEY
     :secret_access_key: MY_SECRET
     :bucket_name: MY_BUCKET_NAME
-##Usage
+== Usage
 To copy a file to the remote clipboard:
 
     machineA: rt cp filename
@@ -39,7 +39,7 @@ You can also dump the remote clipboard to the stdout.
     drwxr-xr-x   2 martinos  staff    68 25 Mar 23:08 a_dir
     -rw-r--r--   1 martinos  staff    15 25 Mar 23:07 a_file.txt
     drwxr-xr-x  65 martinos  staff  2210 25 Mar 23:07 ..
-## License
+== License
 
 Released under the MIT License.  See the LICENSE file for further details.
 
