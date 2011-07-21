@@ -10,14 +10,14 @@ include AWS::S3
 module RemoteCp  
   class Clipboard
     include AWS::S3
-    attr_accessor :content_bucket, :filename_bucket, :type_bucket
+    attr_accessor :content_object, :filename_object, :type_object
     
     def initialize
       connect
       @bucket = Bucket.find(bucket_name)
-      @content_bucket = @bucket['content'] || create_obj("content", "")
-      @filename_bucket = @bucket['file_name.txt'] || create_obj("file_name.txt", "")
-      @type_bucket = @bucket['type'] || create_obj("type", "")
+      @content_object = @bucket['content'] || create_obj("content", "")
+      @filename_object = @bucket['file_name.txt'] || create_obj("file_name.txt", "")
+      @type_object = @bucket['type'] || create_obj("type", "")
     end
 
     def connect
@@ -54,19 +54,19 @@ module RemoteCp
     def push(str, filename = "anomymous", type = :file, content_type = nil)
       # I think that all this info should be included file's metadata 
       # AWS::S3 does not support metadata setting on creation.
-      @filename_bucket.value = filename
-      @filename_bucket.save
+      @filename_object.value = filename
+      @filename_object.save
       
-      @content_bucket.value = str
-      @content_bucket.content_type = content_type
-      @content_bucket.save
+      @content_object.value = str
+      @content_object.content_type = content_type
+      @content_object.save
       
-      @type_bucket.value = type.to_s
-      @type_bucket.save
+      @type_object.value = type.to_s
+      @type_object.save
     end
     
     def pull
-      @content_bucket.value
+      @content_object.value
     end
     
     def bucket_name
@@ -74,7 +74,7 @@ module RemoteCp
     end
     
     def filetype
-      @type_bucket.value
+      @type_object.value
     end
     
     def content
@@ -82,7 +82,7 @@ module RemoteCp
     end
 
     def filename
-      @filename_bucket.value
+      @filename_object.value
     end
     
     def create_obj(key, value)
