@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remote_cp (0.0.12)
+    remote_cp (0.0.13)
       aws-s3
       minitar
       rake
