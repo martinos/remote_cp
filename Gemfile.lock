@@ -1,9 +1,10 @@
 PATH
   remote: .
   specs:
-    remote_cp (0.0.10)
+    remote_cp (0.0.12)
       aws-s3
       minitar
+      rake
       thor
 
 GEM
@@ -16,8 +17,9 @@ GEM
     builder (3.0.0)
     mime-types (1.16)
     minitar (0.5.3)
+    rake (0.9.2)
     thor (0.14.6)
-    xml-simple (1.0.12)
+    xml-simple (1.1.0)
 
 PLATFORMS
   ruby
