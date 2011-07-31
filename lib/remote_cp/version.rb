@@ -1,3 +1,3 @@
 module RemoteCp
-  VERSION = "0.0.14"
+  VERSION = "0.1.1"
 end
