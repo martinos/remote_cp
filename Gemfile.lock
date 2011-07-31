@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remote_cp (0.1.1)
+    remote_cp (0.1.0)
       minitar
       rake
       right_aws
