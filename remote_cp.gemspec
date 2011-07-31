@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "remote_cp"
   
-  s.add_dependency "aws-s3"
+  s.add_dependency "right_aws"
   s.add_dependency "thor"
   s.add_dependency "minitar"
   s.add_dependency "rake"

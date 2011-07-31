@@ -2,29 +2,24 @@ require 'rubygems'
 require 'zlib'
 require 'archive/tar/minitar'
 require 'thor'
-require 'aws/s3'
 require 'remote_cp/core_ext'
-
-include AWS::S3
+require 'aws/s3'
+require 'right_aws'
+require 'logger'
 
 module RemoteCp  
   class Clipboard
-    include AWS::S3
+    include RightAws
     attr_accessor :content_object, :filename_object, :type_object
     
     def initialize
       connect
-      @bucket = Bucket.find(bucket_name)
-      @content_object = @bucket['content'] || create_obj("content", "")
-      @filename_object = @bucket['file_name.txt'] || create_obj("file_name.txt", "")
-      @type_object = @bucket['type'] || create_obj("type", "")
+      @bucket = @s3.buckets.detect{|a| a.full_name == "RemoteClipboard"}
+      @content_object = @bucket.key('content', true)
     end
 
     def connect
-      AWS::S3::Base.establish_connection!(
-      :access_key_id     => config[:access_key_id],
-      :secret_access_key => config[:secret_access_key]
-      )
+      @s3 = RightAws::S3.new(config[:access_key_id], config[:secret_access_key], :logger => Logger.new('/dev/null'))
     end
 
     def config
@@ -52,21 +47,15 @@ module RemoteCp
     # str : content to copy
     # type : :file, :directory
     def push(str, filename = "anomymous", type = :file, content_type = nil)
-      # I think that all this info should be included file's metadata 
-      # AWS::S3 does not support metadata setting on creation.
-      @filename_object.value = filename
-      @filename_object.save
-      
-      @content_object.value = str
-      @content_object.content_type = content_type
-      @content_object.save
-      
-      @type_object.value = type.to_s
-      @type_object.save
+      metadata = { "filename" => filename, "type" => type.to_s}
+
+      @content_object.meta_headers = metadata
+      @content_object.data = str
+      @content_object.put
     end
     
     def pull
-      @content_object.value
+      @content_object.get
     end
     
     def bucket_name
@@ -74,15 +63,15 @@ module RemoteCp
     end
     
     def filetype
-      @type_object.value
+      @content_object.meta_headers["type"]
     end
     
     def content
-      @bucket['content'].value
+      @content_object.data
     end
 
     def filename
-      @filename_object.value
+      @content_object.meta_headers["filename"]
     end
     
     def create_obj(key, value)
