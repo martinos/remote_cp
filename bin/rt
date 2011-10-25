@@ -3,13 +3,11 @@ require 'rubygems'
 require 'zlib'
 require 'archive/tar/minitar'
 require 'thor'
-require 'aws/s3'
 require 'yaml'
 require 'remote_cp'
 
 class Clipboard < Thor
   include Archive::Tar
-  include AWS::S3
   
   def initialize(*args)
     @clipboard = RemoteCp::Clipboard.new

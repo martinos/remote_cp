@@ -3,7 +3,6 @@ require 'zlib'
 require 'archive/tar/minitar'
 require 'thor'
 require 'remote_cp/core_ext'
-require 'aws/s3'
 require 'right_aws'
 require 'logger'
 
