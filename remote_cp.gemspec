@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   
   s.add_dependency "right_aws"
   s.add_dependency "thor"
-  s.add_dependency "minitar"
+  s.add_dependency "minitar" , ">= 0.6"
   s.add_dependency "rake"
   s.add_development_dependency("bundler", "~> 1.0")
   s.files         = `git ls-files`.split("\n")
